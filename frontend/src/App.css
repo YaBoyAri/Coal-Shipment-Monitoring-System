@@ -40,3 +40,23 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Shipping table styles */
+.shipping-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+.shipping-table th,
+.shipping-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  font-size: 0.9rem;
+}
+.shipping-table th {
+  background: #0000;
+}
+.shipping-table tr:nth-child(even) {
+  background: #0000;
+}
