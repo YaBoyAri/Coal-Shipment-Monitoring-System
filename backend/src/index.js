@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mysql from 'mysql2/promise';
+import bcrypt from 'bcryptjs';
+import crypto from 'node:crypto';
 
 dotenv.config();
 
@@ -9,7 +11,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Session-Id']
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -38,19 +46,115 @@ async function createPool() {
   }
 }
 
+async function ensurePool() {
+  if (!pool) {
+    pool = await createPool();
+  }
+  return pool;
+}
+
+function getSessionId(req) {
+  const header = req.headers.authorization;
+  if (header && typeof header === 'string' && header.toLowerCase().startsWith('bearer ')) {
+    return header.slice(7).trim();
+  }
+  const sid = req.headers['x-session-id'];
+  if (typeof sid === 'string' && sid.trim()) return sid.trim();
+  return null;
+}
+
+async function getSession(req) {
+  const sid = getSessionId(req);
+  if (!sid) return null;
+
+  const p = await ensurePool();
+  if (!p) return null;
+
+  const [rows] = await p.query('SELECT sid, expires, data FROM sessions WHERE sid = ? LIMIT 1', [sid]);
+  if (!Array.isArray(rows) || rows.length === 0) return null;
+  const row = rows[0];
+  if (row.expires && new Date(row.expires).getTime() <= Date.now()) return null;
+
+  let data = null;
+  try {
+    data = row.data ? JSON.parse(row.data) : null;
+  } catch {
+    data = null;
+  }
+
+  return { sid: row.sid, expires: row.expires, data };
+}
+
+async function requireAuth(req, res, next) {
+  try {
+    const session = await getSession(req);
+    if (!session || !session.data || !session.data.user) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    req.user = session.data.user;
+    req.sessionId = session.sid;
+    next();
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Auth check failed' });
+  }
+}
+
 // Routes
 app.get('/', (req, res) => {
   res.json({ message: 'Backend PTBA is running!' });
 });
 
-// GET shipping data
-app.get('/api/shipping', async (req, res) => {
+// AUTH: Login with email or name ("username" field)
+app.post('/api/auth/login', async (req, res) => {
   try {
-    if (!pool) {
-      pool = await createPool();
-      if (!pool) return res.status(500).json({ error: 'Database not configured or unreachable' });
+    const p = await ensurePool();
+    if (!p) return res.status(500).json({ error: 'Database not configured or unreachable' });
+
+    const username = (req.body?.username ?? req.body?.email ?? '').toString().trim();
+    const password = (req.body?.password ?? '').toString();
+    if (!username || !password) {
+      return res.status(400).json({ error: 'username and password are required' });
     }
-    const [rows] = await pool.query('SELECT * FROM shipping_data ORDER BY id ASC');
+
+    const [rows] = await p.query(
+      'SELECT id, uuid, name, email, password, role FROM users WHERE email = ? OR name = ? LIMIT 1',
+      [username, username]
+    );
+    if (!Array.isArray(rows) || rows.length === 0) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const user = rows[0];
+    const ok = await bcrypt.compare(password, user.password);
+    if (!ok) return res.status(401).json({ error: 'Invalid credentials' });
+
+    const sid = crypto.randomUUID();
+    const ttlDays = process.env.SESSION_TTL_DAYS ? Number(process.env.SESSION_TTL_DAYS) : 7;
+    const expires = new Date(Date.now() + ttlDays * 24 * 60 * 60 * 1000);
+    const safeUser = { id: user.id, uuid: user.uuid, name: user.name, email: user.email, role: user.role };
+    const data = JSON.stringify({ user: safeUser });
+
+    await p.query('INSERT INTO sessions (sid, expires, data) VALUES (?, ?, ?)', [sid, expires, data]);
+
+    res.json({ sid, expires, user: safeUser });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Login failed', details: err.message });
+  }
+});
+
+// AUTH: Current user (requires Authorization: Bearer <sid>)
+app.get('/api/auth/me', requireAuth, async (req, res) => {
+  res.json({ user: req.user });
+});
+
+// GET shipping data
+app.get('/api/shipping', requireAuth, async (req, res) => {
+  try {
+    const p = await ensurePool();
+    if (!p) return res.status(500).json({ error: 'Database not configured or unreachable' });
+    const [rows] = await p.query('SELECT * FROM shipping_data ORDER BY id ASC');
     res.json(rows);
   } catch (err) {
     console.error(err);

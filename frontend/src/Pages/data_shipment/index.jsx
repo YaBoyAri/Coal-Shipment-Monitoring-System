@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './index.css'
 
 function DataShipment() {
+  const navigate = useNavigate()
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -10,7 +12,18 @@ function DataShipment() {
     async function fetchData() {
       try {
         setLoading(true)
-        const res = await fetch('http://localhost:3000/api/shipping')
+        const sid = localStorage.getItem('ptba_sid')
+        const res = await fetch('http://localhost:3000/api/shipping', {
+          headers: {
+            Authorization: `Bearer ${sid}`
+          }
+        })
+        if (res.status === 401) {
+          localStorage.removeItem('ptba_sid')
+          localStorage.removeItem('ptba_user')
+          navigate('/login', { replace: true })
+          return
+        }
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
         const json = await res.json()
         setData(json)
@@ -21,7 +34,7 @@ function DataShipment() {
       }
     }
     fetchData()
-  }, [])
+  }, [navigate])
 
   return (
     <div className="data-shipment-container">
