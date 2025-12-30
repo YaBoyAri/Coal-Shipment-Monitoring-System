@@ -19,6 +19,27 @@
   overflow-y: auto;
 }
 
+.search-bar {
+  width: 100%;
+  margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: flex-end;
+}
+.search-bar input {
+  padding: 8px 12px;
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  width: 260px;
+  font-size: 0.95rem;
+}
+
+.hl {
+  background: #fff18a;
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
 /* Shipping table styles */
 .shipping-table {
   width: 100%;
