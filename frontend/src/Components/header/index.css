@@ -26,3 +26,25 @@
   margin: 0;
   font-size: 1.3rem;
 }
+
+.logout-button {
+  padding: 0.5rem 1rem;
+  background-color: #f2b233;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.logout-button:hover {
+  background-color: #e0a028;
+  transform: translateY(-1px);
+}
+
+.logout-button:active {
+  transform: translateY(0);
+}

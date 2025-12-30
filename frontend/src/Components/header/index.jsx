@@ -1,6 +1,19 @@
+import { useNavigate } from 'react-router-dom'
 import './index.css'
 
 function Header() {
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    try {
+      localStorage.removeItem('ptba_sid')
+      localStorage.removeItem('ptba_user')
+    } catch {
+      // ignore
+    }
+    navigate('/login', { replace: true })
+  }
+
   return (
     <header className="header">
       <div className="header-content">
@@ -8,6 +21,9 @@ function Header() {
           <img src="/logo/Bukit Asam.svg" alt="Bukit Asam Logo" />
           <h2>Coal Shipment Monitoring System</h2>
         </div>
+        <button className="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
       </div>
     </header>
   )

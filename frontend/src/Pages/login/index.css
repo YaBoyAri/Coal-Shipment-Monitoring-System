@@ -4,14 +4,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('/Group.svg');
+  background-image: url('/Login Background.svg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
 .login-card {
-  width: 520px;
+  width: 400px;
   max-width: calc(100% - 40px);
   background: rgba(255, 255, 255, 0.95);
   border-radius: 18px;
@@ -27,7 +27,7 @@
 }
 
 .login-logo img {
-  height: 28px;
+  height: 50px;
   width: auto;
 }
 
