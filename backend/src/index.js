@@ -162,6 +162,60 @@ app.get('/api/shipping', requireAuth, async (req, res) => {
   }
 });
 
+// CREATE shipping data
+app.post('/api/shipping', requireAuth, async (req, res) => {
+  try {
+    const p = await ensurePool();
+    if (!p) return res.status(500).json({ error: 'Database not configured or unreachable' });
+
+    const {
+      tug_barge_name,
+      brand,
+      tonnage,
+      buyer,
+      pod,
+      jetty,
+      status,
+      est_commenced_loading,
+      est_completed_loading,
+      rata_rata_muat,
+      si_spk
+    } = req.body;
+
+    // Validate required fields
+    if (!tug_barge_name || !brand || !tonnage || !buyer || !pod || !jetty || !status) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const [result] = await p.query(
+      `INSERT INTO shipping_data 
+       (tug_barge_name, brand, tonnage, buyer, pod, jetty, status, est_commenced_loading, est_completed_loading, rata_rata_muat, si_spk) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        tug_barge_name,
+        brand,
+        tonnage,
+        buyer,
+        pod,
+        jetty,
+        status,
+        est_commenced_loading || null,
+        est_completed_loading || null,
+        rata_rata_muat || null,
+        si_spk || null
+      ]
+    );
+
+    res.status(201).json({
+      id: result.insertId,
+      message: 'Shipping data created successfully'
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Create failed', details: err.message });
+  }
+});
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`Server berjalan di http://localhost:${PORT}`);

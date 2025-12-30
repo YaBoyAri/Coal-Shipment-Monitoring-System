@@ -26,6 +26,7 @@
   transition: background-color 0.3s ease;
   border-left: 4px solid transparent;
   font-size: 0.95rem;
+  text-align: center;
 }
 
 .nav-link:hover {

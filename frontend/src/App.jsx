@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import './App.css'
 import DataShipment from './Pages/data_shipment'
 import Dashboard from './Pages/dashboard'
+import InputDataShipment from './Pages/input_data_shipment'
 import Login from './Pages/login'
 import Header from './Components/header'
 import Sidebar from './Components/sidebar'
@@ -40,6 +41,14 @@ function AppShell() {
               element={
                 <RequireAuth>
                   <DataShipment />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/input-data-shipment"
+              element={
+                <RequireAuth>
+                  <InputDataShipment />
                 </RequireAuth>
               }
             />

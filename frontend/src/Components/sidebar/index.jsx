@@ -7,18 +7,23 @@ function Sidebar() {
       <nav className="sidebar-nav">
         <ul>
           <li>
-            <Link to="/data-shipment" className="nav-link">
-              📊 Data Shipment
+            <Link to="/dashboard" className="nav-link">
+              Dashboard
             </Link>
           </li>
           <li>
-            <Link to="/dashboard" className="nav-link">
-              📈 Dashboard
+            <Link to="/data-shipment" className="nav-link">
+              Data Shipment
+            </Link>
+          </li>
+          <li>
+            <Link to="/input-data-shipment" className="nav-link">
+              Input Data Shipment
             </Link>
           </li>
           <li>
             <Link to="/login" className="nav-link">
-              🔐 Login
+              Login
             </Link>
           </li>
         </ul>
