@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './index.css'
 
 function InputDataShipment() {
   const navigate = useNavigate()
-  const [formData, setFormData] = useState({
+  const STORAGE_KEY = 'ptba_form_shipment'
+  
+  const initialFormState = {
     tug_barge_name: '',
     brand: '',
     tonnage: '',
@@ -16,14 +18,39 @@ function InputDataShipment() {
     est_completed_loading: '',
     rata_rata_muat: '',
     si_spk: ''
-  })
+  }
 
+  const [formData, setFormData] = useState(initialFormState)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [confirmAction, setConfirmAction] = useState(null)
 
   const jettyOptions = ['Enim', 'Ogan']
   const statusOptions = ['Loading', 'At Dolphin', 'ETA Keramasan']
+
+  // Load form data dari localStorage saat component mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        setFormData(parsed)
+      }
+    } catch (err) {
+      console.error('Failed to load form data:', err)
+    }
+  }, [])
+
+  // Simpan form data ke localStorage setiap kali berubah
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(formData))
+    } catch (err) {
+      console.error('Failed to save form data:', err)
+    }
+  }, [formData])
 
   function handleChange(e) {
     const { name, value } = e.target
@@ -62,34 +89,52 @@ function InputDataShipment() {
         throw new Error(json?.error || `${res.status} ${res.statusText}`)
       }
 
-      setSuccess('Data berhasil ditambahkan!')
-      setFormData({
-        tug_barge_name: '',
-        brand: '',
-        tonnage: '',
-        buyer: '',
-        pod: '',
-        jetty: '',
-        status: '',
-        est_commenced_loading: '',
-        est_completed_loading: '',
-        rata_rata_muat: '',
-        si_spk: ''
-      })
+      // Hapus form data dari localStorage setelah berhasil submit
+      localStorage.removeItem(STORAGE_KEY)
+      
+      setSuccess('✓ Data berhasil ditambahkan!')
+      setFormData(initialFormState)
 
       setTimeout(() => {
         navigate('/data-shipment', { replace: true })
       }, 1500)
     } catch (err) {
-      setError(err.message)
+      setError('✗ ' + err.message)
     } finally {
       setSubmitting(false)
     }
   }
 
-  function handleCancel() {
-    navigate('/data-shipment', { replace: true })
+  function handleClear() {
+    setConfirmAction('clear')
+    setShowConfirm(true)
   }
+
+  function handleCancel() {
+    setConfirmAction('cancel')
+    setShowConfirm(true)
+  }
+
+  function confirmAction_() {
+    if (confirmAction === 'clear') {
+      setFormData(initialFormState)
+      localStorage.removeItem(STORAGE_KEY)
+      setError('')
+      setSuccess('')
+    } else if (confirmAction === 'cancel') {
+      localStorage.removeItem(STORAGE_KEY)
+      navigate('/data-shipment', { replace: true })
+    }
+    setShowConfirm(false)
+    setConfirmAction(null)
+  }
+
+  function cancelConfirm() {
+    setShowConfirm(false)
+    setConfirmAction(null)
+  }
+
+  const isFormEmpty = Object.values(formData).every(val => val === '')
 
   return (
     <div className="input-data-container">
@@ -274,22 +319,69 @@ function InputDataShipment() {
           <div className="form-actions">
             <button
               type="button"
-              className="btn btn-cancel"
+              className="btn btn-secondary"
               onClick={handleCancel}
               disabled={submitting}
             >
-              Cancel
+              ← Kembali
+            </button>
+            <div className="action-spacer"></div>
+            <button
+              type="button"
+              className="btn btn-tertiary"
+              onClick={handleClear}
+              disabled={submitting || isFormEmpty}
+            >
+              🗑️ Clear
             </button>
             <button
               type="submit"
               className="btn btn-submit"
               disabled={submitting}
             >
-              {submitting ? 'Menyimpan...' : 'Simpan'}
+              {submitting ? '⏳ Menyimpan...' : '💾 Simpan'}
             </button>
           </div>
         </form>
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirm && (
+        <div className="modal-overlay" onClick={cancelConfirm}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>
+                {confirmAction === 'clear'
+                  ? '🗑️ Hapus Semua Data?'
+                  : '👋 Kembali ke Data Shipment?'}
+              </h3>
+            </div>
+            <div className="modal-body">
+              <p>
+                {confirmAction === 'clear'
+                  ? 'Semua data yang sudah Anda masukkan akan dihapus. Tindakan ini tidak dapat dibatalkan.'
+                  : 'Data yang sudah Anda masukkan akan dihapus saat Anda kembali. Lanjutkan?'}
+              </p>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-modal-cancel"
+                onClick={cancelConfirm}
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                className="btn btn-modal-confirm"
+                onClick={confirmAction_}
+              >
+                {confirmAction === 'clear' ? 'Hapus' : 'Kembali'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

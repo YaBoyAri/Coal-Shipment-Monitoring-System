@@ -216,6 +216,30 @@ app.post('/api/shipping', requireAuth, async (req, res) => {
   }
 });
 
+// DELETE shipping data
+app.delete('/api/shipping/:id', requireAuth, async (req, res) => {
+  try {
+    const p = await ensurePool();
+    if (!p) return res.status(500).json({ error: 'Database not configured or unreachable' });
+
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ error: 'ID is required' });
+    }
+
+    const [result] = await p.query('DELETE FROM shipping_data WHERE id = ?', [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Data not found' });
+    }
+
+    res.json({ message: 'Shipping data deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Delete failed', details: err.message });
+  }
+});
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`Server berjalan di http://localhost:${PORT}`);
