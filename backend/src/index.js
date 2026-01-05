@@ -240,6 +240,68 @@ app.delete('/api/shipping/:id', requireAuth, async (req, res) => {
   }
 });
 
+// UPDATE shipping data
+app.put('/api/shipping/:id', requireAuth, async (req, res) => {
+  try {
+    const p = await ensurePool();
+    if (!p) return res.status(500).json({ error: 'Database not configured or unreachable' });
+
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ error: 'ID is required' });
+    }
+
+    const {
+      tug_barge_name,
+      brand,
+      tonnage,
+      buyer,
+      pod,
+      jetty,
+      status,
+      est_commenced_loading,
+      est_completed_loading,
+      rata_rata_muat,
+      si_spk
+    } = req.body;
+
+    // Validate required fields
+    if (!tug_barge_name || !brand || !tonnage || !buyer || !pod || !jetty || !status) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const [result] = await p.query(
+      `UPDATE shipping_data SET 
+       tug_barge_name=?, brand=?, tonnage=?, buyer=?, pod=?, jetty=?, status=?, 
+       est_commenced_loading=?, est_completed_loading=?, rata_rata_muat=?, si_spk=? 
+       WHERE id=?`,
+      [
+        tug_barge_name,
+        brand,
+        tonnage,
+        buyer,
+        pod,
+        jetty,
+        status,
+        est_commenced_loading || null,
+        est_completed_loading || null,
+        rata_rata_muat || null,
+        si_spk || null,
+        id
+      ]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Data not found' });
+    }
+
+    res.json({ message: 'Shipping data updated successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Update failed', details: err.message });
+  }
+});
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`Server berjalan di http://localhost:${PORT}`);

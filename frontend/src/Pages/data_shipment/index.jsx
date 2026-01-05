@@ -66,9 +66,7 @@ function DataShipment() {
   }
 
   function handleEdit(id) {
-    // TODO: Implement edit functionality
-    console.log('Edit:', id)
-    alert('Fitur edit akan segera hadir!')
+    navigate(`/edit-data-shipment/${id}`)
   }
 
   function handleDeleteClick(id) {
