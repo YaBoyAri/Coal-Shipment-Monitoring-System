@@ -40,3 +40,21 @@
   color: #007bff;
   font-weight: 600;
 }
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100% !important;
+    height: auto !important;
+    border-right: none;
+  }
+
+  .sidebar-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .sidebar-nav li {
+    flex: 1;
+    min-width: 150px;
+  }
+}

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import './index.css'
+import '../input_data_shipment/index.css'
 
 function EditDataShipment() {
   const navigate = useNavigate()
   const { id } = useParams()
-  
+
   const initialFormState = {
     tug_barge_name: '',
     brand: '',
@@ -25,25 +25,21 @@ function EditDataShipment() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const [showConfirm, setShowConfirm] = useState(false)
-  const [confirmAction, setConfirmAction] = useState(null)
 
   const jettyOptions = ['Enim', 'Ogan']
   const statusOptions = ['Loading', 'At Dolphin', 'ETA Keramasan']
 
-  // Load data saat component mount
   useEffect(() => {
-    fetchData()
+    fetchItem()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
-  async function fetchData() {
+  async function fetchItem() {
     try {
       setLoading(true)
       const sid = localStorage.getItem('ptba_sid')
-      const res = await fetch(`http://localhost:3000/api/shipping`, {
-        headers: {
-          Authorization: `Bearer ${sid}`
-        }
+      const res = await fetch(`http://localhost:3000/api/shipping/${id}`, {
+        headers: { Authorization: `Bearer ${sid}` }
       })
 
       if (res.status === 401) {
@@ -54,26 +50,53 @@ function EditDataShipment() {
       }
 
       if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
-      const allData = await res.json()
-      
-      // Find the specific record by ID
-      const record = allData.find(item => item.id === parseInt(id))
-      if (!record) {
-        setError('Data tidak ditemukan')
-        return
+      const json = await res.json()
+      // Helper to convert DB datetime to input[type=datetime-local] value
+      const toLocalDateTime = (val) => {
+        if (!val) return ''
+        // Try to create Date from various formats
+        let d = new Date(val)
+        if (isNaN(d.getTime())) {
+          // convert space to T for 'YYYY-MM-DD HH:MM:SS'
+          const alt = String(val).replace(' ', 'T')
+          d = new Date(alt)
+        }
+        if (isNaN(d.getTime())) return ''
+        const pad = (n) => String(n).padStart(2, '0')
+        const yyyy = d.getFullYear()
+        const mm = pad(d.getMonth() + 1)
+        const dd = pad(d.getDate())
+        const hh = pad(d.getHours())
+        const min = pad(d.getMinutes())
+        return `${yyyy}-${mm}-${dd}T${hh}:${min}`
       }
 
-      // Format datetime values for input
-      const formattedData = {
-        ...record,
-        est_commenced_loading: record.est_commenced_loading 
-          ? new Date(record.est_commenced_loading).toISOString().slice(0, 16)
-          : '',
-        est_completed_loading: record.est_completed_loading
-          ? new Date(record.est_completed_loading).toISOString().slice(0, 16)
-          : ''
+      const toTimeValue = (v) => {
+        if (v == null) return ''
+        const s = String(v)
+        // If contains date-time like '2025-01-01T08:30:00' or '2025-01-01 08:30:00'
+        const dtMatch = s.match(/(\d{2}:\d{2})(?::\d{2})?/)
+        if (dtMatch) return dtMatch[1]
+        // If matches H:MM or HH:MM:SS
+        const timeMatch = s.match(/(\d{1,2}):(\d{2})/) 
+        if (timeMatch) return `${timeMatch[1].padStart(2,'0')}:${timeMatch[2]}`
+        return ''
       }
-      setFormData(formattedData)
+
+      setFormData({
+        tug_barge_name: json.tug_barge_name ?? '',
+        brand: json.brand ?? '',
+        tonnage: json.tonnage ?? '',
+        buyer: json.buyer ?? '',
+        pod: json.pod ?? '',
+        jetty: json.jetty ?? '',
+        status: json.status ?? '',
+        est_commenced_loading: toLocalDateTime(json.est_commenced_loading),
+        est_completed_loading: toLocalDateTime(json.est_completed_loading),
+        rata_rata_muat: toTimeValue(json.rata_rata_muat),
+        si_spk: json.si_spk ?? ''
+      })
+      setError('')
     } catch (err) {
       setError(err.message)
     } finally {
@@ -83,10 +106,7 @@ function EditDataShipment() {
 
   function handleChange(e) {
     const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
+    setFormData(prev => ({ ...prev, [name]: value }))
   }
 
   async function handleSubmit(e) {
@@ -97,13 +117,18 @@ function EditDataShipment() {
 
     try {
       const sid = localStorage.getItem('ptba_sid')
+      const payload = {
+        ...formData,
+        tonnage: formData.tonnage === '' ? null : Number(formData.tonnage),
+        rata_rata_muat: formData.rata_rata_muat === '' ? null : String(formData.rata_rata_muat)
+      }
       const res = await fetch(`http://localhost:3000/api/shipping/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${sid}`
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       })
 
       if (res.status === 401) {
@@ -119,10 +144,7 @@ function EditDataShipment() {
       }
 
       setSuccess('✓ Data berhasil diperbarui!')
-
-      setTimeout(() => {
-        navigate('/data-shipment', { replace: true })
-      }, 1500)
+      setTimeout(() => navigate('/data-shipment', { replace: true }), 1200)
     } catch (err) {
       setError('✗ ' + err.message)
     } finally {
@@ -131,45 +153,26 @@ function EditDataShipment() {
   }
 
   function handleCancel() {
-    setConfirmAction('cancel')
-    setShowConfirm(true)
+    navigate('/data-shipment')
   }
 
-  function confirmAction_() {
-    if (confirmAction === 'cancel') {
-      navigate('/data-shipment', { replace: true })
-    }
-    setShowConfirm(false)
-    setConfirmAction(null)
-  }
-
-  function cancelConfirm() {
-    setShowConfirm(false)
-    setConfirmAction(null)
-  }
-
-  if (loading) {
-    return (
-      <div className="edit-data-container">
-        <div className="edit-data-card">
-          <div className="loading-state">
-            <p>⏳ Memuat data...</p>
-          </div>
-        </div>
+  if (loading) return (
+    <div className="input-data-container">
+      <div className="input-data-card">
+        <p>⏳ Memuat data...</p>
       </div>
-    )
-  }
+    </div>
+  )
 
   return (
-    <div className="edit-data-container">
-      <div className="edit-data-card">
-        <div className="edit-data-header">
-          <h1>✏️ Edit Data Shipment</h1>
-          <p>Ubah informasi data shipment</p>
+    <div className="input-data-container">
+      <div className="input-data-card">
+        <div className="input-data-header">
+          <h1>Edit Data Shipment</h1>
+          <p>Ubah data shipment yang dipilih</p>
         </div>
 
-        <form className="edit-form" onSubmit={handleSubmit}>
-          {/* Row 1: Tug/Barge */}
+        <form className="input-form" onSubmit={handleSubmit}>
           <div className="form-row full">
             <div className="form-group">
               <label htmlFor="tug_barge_name">Tug / Barge</label>
@@ -180,216 +183,85 @@ function EditDataShipment() {
                 value={formData.tug_barge_name}
                 onChange={handleChange}
                 placeholder="Masukkan nama tug / barge"
-                required
               />
             </div>
           </div>
 
-          {/* Row 2: Brand & Tonnage */}
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="brand">Brand</label>
-              <input
-                id="brand"
-                name="brand"
-                type="text"
-                value={formData.brand}
-                onChange={handleChange}
-                placeholder="Masukkan brand"
-                required
-              />
+              <input id="brand" name="brand" type="text" value={formData.brand} onChange={handleChange} />
             </div>
             <div className="form-group">
               <label htmlFor="tonnage">Tonnage</label>
-              <input
-                id="tonnage"
-                name="tonnage"
-                type="number"
-                value={formData.tonnage}
-                onChange={handleChange}
-                placeholder="Masukkan tonnage"
-                required
-              />
+              <input id="tonnage" name="tonnage" type="number" value={formData.tonnage} onChange={handleChange} />
             </div>
           </div>
 
-          {/* Row 3: Buyer & POD */}
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="buyer">Buyer</label>
-              <input
-                id="buyer"
-                name="buyer"
-                type="text"
-                value={formData.buyer}
-                onChange={handleChange}
-                placeholder="Masukkan buyer"
-                required
-              />
+              <input id="buyer" name="buyer" type="text" value={formData.buyer} onChange={handleChange} />
             </div>
             <div className="form-group">
               <label htmlFor="pod">POD</label>
-              <input
-                id="pod"
-                name="pod"
-                type="text"
-                value={formData.pod}
-                onChange={handleChange}
-                placeholder="Masukkan POD"
-                required
-              />
+              <input id="pod" name="pod" type="text" value={formData.pod} onChange={handleChange} />
             </div>
           </div>
 
-          {/* Row 4: Jetty & Status */}
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="jetty">Jetty</label>
-              <select
-                id="jetty"
-                name="jetty"
-                value={formData.jetty}
-                onChange={handleChange}
-                required
-              >
+              <select id="jetty" name="jetty" value={formData.jetty} onChange={handleChange}>
                 <option value="">Pilih Jetty</option>
                 {jettyOptions.map(option => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
+                  <option key={option} value={option}>{option}</option>
                 ))}
               </select>
             </div>
-
             <div className="form-group">
               <label htmlFor="status">Status</label>
-              <select
-                id="status"
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                required
-              >
+              <select id="status" name="status" value={formData.status} onChange={handleChange}>
                 <option value="">Pilih Status</option>
                 {statusOptions.map(option => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
+                  <option key={option} value={option}>{option}</option>
                 ))}
               </select>
             </div>
           </div>
 
-          {/* Row 5: Est Commenced & Est Completed */}
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="est_commenced_loading">Est Commenced</label>
-              <input
-                id="est_commenced_loading"
-                name="est_commenced_loading"
-                type="datetime-local"
-                value={formData.est_commenced_loading}
-                onChange={handleChange}
-                required
-              />
+              <input id="est_commenced_loading" name="est_commenced_loading" type="datetime-local" value={formData.est_commenced_loading} onChange={handleChange} />
             </div>
             <div className="form-group">
               <label htmlFor="est_completed_loading">Est Completed</label>
-              <input
-                id="est_completed_loading"
-                name="est_completed_loading"
-                type="datetime-local"
-                value={formData.est_completed_loading}
-                onChange={handleChange}
-                required
-              />
+              <input id="est_completed_loading" name="est_completed_loading" type="datetime-local" value={formData.est_completed_loading} onChange={handleChange} />
             </div>
           </div>
 
-          {/* Row 6: Rata-Rata Muat & SI/SPK */}
           <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="rata_rata_muat">Rata - Rata Muat</label>
-              <input
-                id="rata_rata_muat"
-                name="rata_rata_muat"
-                type="number"
-                step="0.01"
-                value={formData.rata_rata_muat}
-                onChange={handleChange}
-                placeholder="Masukkan rata-rata"
-                required
-              />
-            </div>
+              <div className="form-group">
+                <label htmlFor="rata_rata_muat">Rata - Rata Muat</label>
+                <input id="rata_rata_muat" name="rata_rata_muat" type="time" step="1" value={formData.rata_rata_muat} onChange={handleChange} />
+              </div>
             <div className="form-group">
               <label htmlFor="si_spk">SI/SPK</label>
-              <input
-                id="si_spk"
-                name="si_spk"
-                type="text"
-                value={formData.si_spk}
-                onChange={handleChange}
-                placeholder="Masukkan SI/SPK (jika ada)"
-                required
-              />
+              <input id="si_spk" name="si_spk" type="text" value={formData.si_spk} onChange={handleChange} />
             </div>
           </div>
 
-          {/* Alerts */}
           {error && <div className="alert alert-error">{error}</div>}
           {success && <div className="alert alert-success">{success}</div>}
 
-          {/* Form Actions */}
           <div className="form-actions">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={handleCancel}
-              disabled={submitting}
-            >
-              ← Kembali
-            </button>
-            <div className="action-spacer"></div>
-            <button
-              type="submit"
-              className="btn btn-submit"
-              disabled={submitting}
-            >
-              {submitting ? '⏳ Menyimpan...' : '💾 Simpan Perubahan'}
-            </button>
+            <button type="button" className="btn btn-secondary" onClick={handleCancel} disabled={submitting}>← Kembali</button>
+            <div className="action-spacer" />
+            <button type="submit" className="btn btn-submit" disabled={submitting}>{submitting ? '⏳ Menyimpan...' : '💾 Simpan Perubahan'}</button>
           </div>
         </form>
       </div>
-
-      {/* Confirmation Modal */}
-      {showConfirm && (
-        <div className="modal-overlay" onClick={cancelConfirm}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>👋 Kembali ke Data Shipment?</h3>
-            </div>
-            <div className="modal-body">
-              <p>Perubahan yang belum disimpan akan hilang. Lanjutkan?</p>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-modal-cancel"
-                onClick={cancelConfirm}
-              >
-                Batal
-              </button>
-              <button
-                type="button"
-                className="btn btn-modal-confirm"
-                onClick={confirmAction_}
-              >
-                Kembali
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
