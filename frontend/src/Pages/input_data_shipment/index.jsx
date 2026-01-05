@@ -305,7 +305,7 @@ function InputDataShipment() {
                 type="text"
                 value={formData.si_spk}
                 onChange={handleChange}
-                placeholder="Masukkan SI/SPK"
+                placeholder="Masukkan SI/SPK (jika ada)"
                 required
               />
             </div>
