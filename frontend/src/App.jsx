@@ -3,6 +3,7 @@ import './App.css'
 import DataShipment from './Pages/data_shipment'
 import Dashboard from './Pages/dashboard'
 import InputDataShipment from './Pages/input_data_shipment'
+import EditDataShipment from './Pages/edit_data_shipment'
 import ExportDataShipment from './Pages/export_data_shipment'
 import Login from './Pages/login'
 import Header from './Components/header'
@@ -50,6 +51,14 @@ function AppShell() {
               element={
                 <RequireAuth>
                   <InputDataShipment />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/edit-data-shipment/:id"
+              element={
+                <RequireAuth>
+                  <EditDataShipment />
                 </RequireAuth>
               }
             />

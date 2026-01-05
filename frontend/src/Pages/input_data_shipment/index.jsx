@@ -68,13 +68,18 @@ function InputDataShipment() {
 
     try {
       const sid = localStorage.getItem('ptba_sid')
+      const payload = {
+        ...formData,
+        tonnage: formData.tonnage === '' ? null : Number(formData.tonnage),
+        rata_rata_muat: formData.rata_rata_muat === '' ? null : String(formData.rata_rata_muat)
+      }
       const res = await fetch('http://localhost:3000/api/shipping', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${sid}`
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       })
 
       if (res.status === 401) {
@@ -289,11 +294,10 @@ function InputDataShipment() {
               <input
                 id="rata_rata_muat"
                 name="rata_rata_muat"
-                type="number"
-                step="0.01"
+                type="time"
+                step="1"
                 value={formData.rata_rata_muat}
                 onChange={handleChange}
-                placeholder="Masukkan rata-rata"
                 required
               />
             </div>

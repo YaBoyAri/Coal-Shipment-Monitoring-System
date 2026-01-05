@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import './index.css'
 
 function Sidebar() {
@@ -7,24 +7,24 @@ function Sidebar() {
       <nav className="sidebar-nav">
         <ul>
           <li>
-            <Link to="/dashboard" className="nav-link">
+            <NavLink to="/dashboard" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
               Dashboard
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to="/data-shipment" className="nav-link">
+            <NavLink to="/data-shipment" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
               Data Shipment
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to="/input-data-shipment" className="nav-link">
+            <NavLink to="/input-data-shipment" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
               Input Data Shipment
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to="/export-data-shipment" className="nav-link">
+            <NavLink to="/export-data-shipment" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
               Export Data Shipment
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </nav>

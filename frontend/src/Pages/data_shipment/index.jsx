@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import './index.css'
 
 function DataShipment() {
@@ -66,9 +66,7 @@ function DataShipment() {
   }
 
   function handleEdit(id) {
-    // TODO: Implement edit functionality
-    console.log('Edit:', id)
-    alert('Fitur edit akan segera hadir!')
+    navigate(`/edit-data-shipment/${id}`)
   }
 
   function handleDeleteClick(id) {
@@ -254,13 +252,7 @@ function DataShipment() {
                           <td>{highlight(row.rata_rata_muat, searchTerm)}</td>
                           <td>{highlight(row.si_spk, searchTerm)}</td>
                           <td className="action-cell">
-                            <button
-                              className="btn-action btn-edit"
-                              onClick={() => handleEdit(row.id)}
-                              title="Edit data"
-                            >
-                              ✏️
-                            </button>
+                            <Link to={`/edit-data-shipment/${row.id}`} className="btn-action btn-edit" title="Edit data">✏️</Link>
                             <button
                               className="btn-action btn-delete"
                               onClick={() => handleDeleteClick(row.id)}
