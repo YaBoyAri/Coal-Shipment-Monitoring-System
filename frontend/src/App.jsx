@@ -3,6 +3,7 @@ import './App.css'
 import DataShipment from './Pages/data_shipment'
 import Dashboard from './Pages/dashboard'
 import InputDataShipment from './Pages/input_data_shipment'
+import ExportDataShipment from './Pages/export_data_shipment'
 import Login from './Pages/login'
 import Header from './Components/header'
 import Sidebar from './Components/sidebar'
@@ -57,6 +58,14 @@ function AppShell() {
               element={
                 <RequireAuth>
                   <Dashboard />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/export-data-shipment"
+              element={
+                <RequireAuth>
+                  <ExportDataShipment />
                 </RequireAuth>
               }
             />
