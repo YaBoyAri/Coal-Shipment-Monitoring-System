@@ -8,6 +8,7 @@
   justify-content: center;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   overflow-y: auto;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .dashboard-card {
@@ -19,6 +20,7 @@
   padding: 2.5rem;
   animation: slideIn 0.5s ease-out;
   margin-top: 2rem;
+  font-family: 'Montserrat', sans-serif;
 }
 
 @keyframes slideIn {
@@ -43,12 +45,14 @@
   font-size: 1.8rem;
   color: #013262;
   font-weight: 700;
+  font-family: 'Lato', sans-serif;
 }
 
 .dashboard-header p {
   margin: 0;
   color: #666;
   font-size: 0.95rem;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* Loading State */
@@ -122,6 +126,7 @@
   font-size: 1.3rem;
   color: #013262;
   font-weight: 700;
+  font-family: 'Lato', sans-serif;
 }
 
 .summary-cards {
@@ -163,6 +168,7 @@
   font-size: 0.9rem;
   color: #666;
   font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .summary-card .card-value {
@@ -170,12 +176,14 @@
   font-size: 1.8rem;
   color: #013262;
   font-weight: 700;
+  font-family: 'Lato', sans-serif;
 }
 
 .summary-card .card-unit {
   margin: 0;
   font-size: 0.85rem;
   color: #999;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* Chart Sections */
@@ -194,6 +202,7 @@
   font-size: 1.1rem;
   color: #013262;
   font-weight: 700;
+  font-family: 'Lato', sans-serif;
 }
 
 .chart-container {
@@ -237,6 +246,7 @@
   font-size: 1.1rem;
   color: #013262;
   font-weight: 700;
+  font-family: 'Lato', sans-serif;
 }
 
 .stats-table table {
@@ -250,6 +260,7 @@
   text-align: left;
   font-size: 0.9rem;
   border-bottom: 1px solid #e0e0e0;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .stats-table th {
@@ -259,6 +270,7 @@
   text-transform: uppercase;
   font-size: 0.85rem;
   letter-spacing: 0.5px;
+  font-family: 'Lato', sans-serif;
 }
 
 .stats-table tbody tr {

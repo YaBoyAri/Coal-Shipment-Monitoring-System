@@ -9,6 +9,7 @@
   top: 0;
   align-self: flex-start;
   min-height: 100vh;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .sidebar-nav ul {
@@ -30,6 +31,8 @@
   border-left: 4px solid transparent;
   font-size: 0.95rem;
   text-align: center;
+  font-family: 'Lato', sans-serif;
+  font-weight: 600;
 }
 
 .nav-link:hover {

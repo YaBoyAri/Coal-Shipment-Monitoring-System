@@ -8,6 +8,7 @@
   justify-content: center;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   overflow-y: auto;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .export-card {
@@ -19,6 +20,7 @@
   padding: 2.5rem;
   animation: slideIn 0.5s ease-out;
   margin-top: 2rem;
+  font-family: 'Montserrat', sans-serif;
 }
 
 @keyframes slideIn {
@@ -43,12 +45,14 @@
   font-size: 1.8rem;
   color: #013262;
   font-weight: 700;
+  font-family: 'Lato', sans-serif;
 }
 
 .export-header p {
   margin: 0;
   color: #666;
   font-size: 0.95rem;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* Loading State */
@@ -135,6 +139,7 @@
   font-size: 1.1rem;
   color: #013262;
   font-weight: 700;
+  font-family: 'Lato', sans-serif;
 }
 
 /* Filter Section */
@@ -154,6 +159,7 @@
   font-weight: 600;
   color: #013262;
   font-size: 0.9rem;
+  font-family: 'Lato', sans-serif;
 }
 
 .filter-group select {
@@ -161,7 +167,7 @@
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   font-size: 0.9rem;
-  font-family: inherit;
+  font-family: 'Montserrat', sans-serif;
   transition: all 0.3s ease;
   background-color: white;
   cursor: pointer;
@@ -191,12 +197,14 @@
   font-size: 1.8rem;
   color: #013262;
   font-weight: 700;
+  font-family: 'Lato', sans-serif;
 }
 
 .data-count .count-label {
   margin: 0.3rem 0 0 0;
   font-size: 0.85rem;
   color: #666;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* Columns Section */
@@ -211,6 +219,7 @@
 
 .columns-header h2 {
   margin: 0;
+  font-family: 'Lato', sans-serif;
 }
 
 .columns-actions {
@@ -228,6 +237,7 @@
   font-size: 0.9rem;
   transition: color 0.3s ease;
   padding: 0;
+  font-family: 'Lato', sans-serif;
 }
 
 .btn-link:hover {
@@ -277,6 +287,7 @@
   font-weight: 500;
   color: #333;
   font-size: 0.9rem;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .columns-count {
@@ -284,6 +295,7 @@
   font-size: 0.9rem;
   color: #666;
   text-align: right;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* Format Section */
@@ -331,11 +343,13 @@
 .format-title {
   font-weight: 600;
   color: #013262;
+  font-family: 'Lato', sans-serif;
 }
 
 .format-desc {
   font-size: 0.85rem;
   color: #666;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* Preview Section */
@@ -361,6 +375,7 @@
   text-align: left;
   font-size: 0.9rem;
   border-bottom: 1px solid #e0e0e0;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .preview-table th {
@@ -370,6 +385,7 @@
   text-transform: uppercase;
   font-size: 0.85rem;
   letter-spacing: 0.5px;
+  font-family: 'Lato', sans-serif;
 }
 
 .preview-table tbody tr:hover {
@@ -386,6 +402,7 @@
   color: #666;
   text-align: center;
   font-style: italic;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* Export Actions */
@@ -407,6 +424,7 @@
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-family: 'Lato', sans-serif;
 }
 
 .btn:disabled {

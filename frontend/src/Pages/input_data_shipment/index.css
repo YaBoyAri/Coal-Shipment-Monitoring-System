@@ -8,6 +8,7 @@
   justify-content: center;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   overflow-y: auto;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .input-data-card {
@@ -19,6 +20,7 @@
   padding: 2.5rem;
   animation: slideIn 0.5s ease-out;
   margin-top: 2rem;
+  font-family: 'Montserrat', sans-serif;
 }
 
 @keyframes slideIn {
@@ -43,18 +45,21 @@
   font-size: 1.8rem;
   color: #013262;
   font-weight: 700;
+  font-family: 'Lato', sans-serif;
 }
 
 .input-data-header p {
   margin: 0;
   color: #666;
   font-size: 0.95rem;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .input-form {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .form-row {
@@ -77,6 +82,7 @@
   font-weight: 600;
   color: #013262;
   font-size: 0.9rem;
+  font-family: 'Lato', sans-serif;
 }
 
 .form-group input,
@@ -85,7 +91,7 @@
   border: 2px solid #e0e0e0;
   border-radius: 6px;
   font-size: 0.9rem;
-  font-family: inherit;
+  font-family: 'Montserrat', sans-serif;
   transition: all 0.3s ease;
   background-color: #fafafa;
   width: 100%;
@@ -116,6 +122,7 @@
   padding: 0.5rem;
   background-color: white;
   color: #013262;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* Alert messages */
@@ -125,6 +132,7 @@
   font-weight: 500;
   animation: fadeIn 0.3s ease;
   margin-top: 0.5rem;
+  font-family: 'Montserrat', sans-serif;
 }
 
 @keyframes fadeIn {
@@ -174,6 +182,7 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   white-space: nowrap;
+  font-family: 'Lato', sans-serif;
 }
 
 .btn:disabled {
@@ -273,6 +282,7 @@
   margin: 0;
   font-size: 1.1rem;
   color: #013262;
+  font-family: 'Lato', sans-serif;
 }
 
 .modal-body {
@@ -283,6 +293,7 @@
   margin: 0;
   color: #666;
   line-height: 1.6;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .modal-footer {
@@ -303,6 +314,7 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-family: 'Lato', sans-serif;
 }
 
 .btn-modal-cancel:hover:not(:disabled) {
@@ -321,6 +333,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+  font-family: 'Lato', sans-serif;
 }
 
 .btn-modal-confirm:hover:not(:disabled) {

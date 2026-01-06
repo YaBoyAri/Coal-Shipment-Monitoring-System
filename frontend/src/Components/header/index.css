@@ -1,39 +1,39 @@
 .header {
   background-color: #013262;
   color: white;
-  padding: 0 1.5rem 0 0; /* keep right padding, remove left padding so logo can align with sidebar */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   flex-shrink: 0;
-  min-height: 64px; /* ensure header has a visible height so .logo can fill it */
+  height: 70px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .header-content {
   display: flex;
-  align-items: stretch; /* make children fill header height so .logo can be full-height */
+  align-items: center;
   justify-content: space-between;
+  height: 100%;
+  gap: 1.5rem;
 }
 
 .logo {
+  background-color: #ffffff;
+  width: 250px;
+  height: 100%;
+  padding: 0 1.2rem;
+  color: #013262;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .logo img {
-  height: 35px;
-}
-
-/* Make a white block behind the logo aligned with the sidebar width */
-.logo {
-  background-color: #ffffff;
-  width: 250px; /* match sidebar width */
-  padding: 0 1rem; /* horizontal padding only, vertical will fill header */
-  color: #013262; /* dark text on white */
-  border-right: 1px solid rgba(0,0,0,0.06);
-  height: 100%;
-  display: flex;
-  align-items: center; /* center logo vertically inside white block */
-  justify-content: center;
+  height: 40px;
+  width: auto;
+  object-fit: contain;
 }
 
 .header-title {
@@ -41,43 +41,94 @@
   text-align: center;
   color: #ffffff;
   margin: 0;
-  font-size: 1.15rem;
-  font-weight: 600;
-}
-
-@media (max-width: 768px) {
-  .header {
-    padding-left: 1.5rem; /* restore padding on small screens */
-  }
-
-  .logo {
-    width: auto;
-    background: transparent;
-    padding: 0;
-  }
-  .header-title {
-    font-size: 1rem;
-  }
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  font-family: 'Lato', sans-serif;
 }
 
 .logout-button {
-  padding: 0.5rem 1rem;
-  background-color: #f2b233;
+  padding: 0.6rem 1.5rem;
+  background: linear-gradient(135deg, #f2b233 0%, #f0a820 100%);
   color: #ffffff;
   border: none;
   border-radius: 6px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.95rem;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(242, 178, 51, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 1.5rem;
+  flex-shrink: 0;
+  font-family: 'Lato', sans-serif;
 }
 
 .logout-button:hover {
-  background-color: #e0a028;
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #e0a028 0%, #d89815 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(242, 178, 51, 0.4);
 }
 
 .logout-button:active {
   transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(242, 178, 51, 0.3);
+}
+
+@media (max-width: 768px) {
+  .header {
+    height: 65px;
+  }
+
+  .logo {
+    width: 200px;
+    padding: 0 1rem;
+  }
+
+  .logo img {
+    height: 35px;
+  }
+
+  .header-title {
+    font-size: 1.1rem;
+  }
+
+  .logout-button {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.85rem;
+    margin-right: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    height: 60px;
+  }
+
+  .header-content {
+    gap: 0.8rem;
+  }
+
+  .logo {
+    width: 160px;
+    padding: 0 0.8rem;
+    border-right: none;
+  }
+
+  .logo img {
+    height: 30px;
+  }
+
+  .header-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .logout-button {
+    padding: 0.45rem 1rem;
+    font-size: 0.8rem;
+    margin-right: 0.8rem;
+    border-radius: 4px;
+  }
 }

@@ -7,6 +7,7 @@
   justify-content: center;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   overflow-y: auto;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .data-shipment-card {
@@ -18,6 +19,7 @@
   padding: 2.5rem;
   animation: slideIn 0.5s ease-out;
   margin-top: 2rem;
+  font-family: 'Montserrat', sans-serif;
 }
 
 @keyframes slideIn {
@@ -42,12 +44,14 @@
   font-size: 1.8rem;
   color: #013262;
   font-weight: 700;
+  font-family: 'Lato', sans-serif;
 }
 
 .data-shipment-header p {
   margin: 0;
   color: #666;
   font-size: 0.95rem;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* Loading State */
@@ -133,7 +137,7 @@
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   font-size: 0.95rem;
-  font-family: inherit;
+  font-family: 'Montserrat', sans-serif;
   transition: all 0.3s ease;
   background-color: #fafafa;
 }
@@ -159,6 +163,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
+  font-family: 'Lato', sans-serif;
 }
 
 .btn:disabled {
@@ -188,6 +193,7 @@
 .shipping-table {
   width: 100%;
   border-collapse: collapse;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .shipping-table th,
@@ -196,6 +202,7 @@
   padding: 12px 14px;
   text-align: left;
   font-size: 0.9rem;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .shipping-table th {
@@ -205,6 +212,7 @@
   position: sticky;
   top: 0;
   z-index: 10;
+  font-family: 'Lato', sans-serif;
 }
 
 .shipping-table tbody tr {
@@ -345,6 +353,7 @@
   margin: 0;
   font-size: 1.1rem;
   color: #013262;
+  font-family: 'Lato', sans-serif;
 }
 
 .modal-body {
@@ -355,6 +364,7 @@
   margin: 0;
   color: #666;
   line-height: 1.6;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .modal-footer {
@@ -375,6 +385,7 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-family: 'Lato', sans-serif;
 }
 
 .btn-modal-cancel:hover:not(:disabled) {
@@ -393,6 +404,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+  font-family: 'Lato', sans-serif;
 }
 
 .btn-modal-confirm:hover:not(:disabled) {

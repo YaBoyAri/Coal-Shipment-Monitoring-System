@@ -5,6 +5,7 @@
   text-align: center;
   border-top: 1px solid #333;
   flex-shrink: 0;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .footer-content {
@@ -16,4 +17,5 @@
 .footer-content p {
   margin: 0;
   font-size: 0.85rem;
+  font-family: 'Montserrat', sans-serif;
 }
