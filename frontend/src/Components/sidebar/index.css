@@ -3,9 +3,12 @@
   background-color: #F4B342;
   padding: 0;
   border-right: 1px solid #ddd;
-  height: 100%;
   overflow-y: auto;
   flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  min-height: 100vh;
 }
 
 .sidebar-nav ul {
@@ -35,26 +38,8 @@
 }
 
 .nav-link.active {
-  background-color: #e3f2fd;
-  border-left-color: #007bff;
-  color: #007bff;
-  font-weight: 600;
-}
-
-@media (max-width: 768px) {
-  .sidebar {
-    width: 100% !important;
-    height: auto !important;
-    border-right: none;
-  }
-
-  .sidebar-nav ul {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .sidebar-nav li {
-    flex: 1;
-    min-width: 150px;
-  }
+  background-color: #fff;
+  border-left-color: transparent;
+  color: #F4B342;
+  font-weight: 700;
 }

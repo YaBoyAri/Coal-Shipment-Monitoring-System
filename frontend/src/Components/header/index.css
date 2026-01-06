@@ -1,31 +1,63 @@
 .header {
   background-color: #013262;
   color: white;
-  padding: 0.75rem 1.5rem;
+  padding: 0 1.5rem 0 0; /* keep right padding, remove left padding so logo can align with sidebar */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
+  min-height: 64px; /* ensure header has a visible height so .logo can fill it */
 }
 
 .header-content {
   display: flex;
-  align-items: center;
+  align-items: stretch; /* make children fill header height so .logo can be full-height */
   justify-content: space-between;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  justify-content: center;
 }
 
 .logo img {
   height: 35px;
 }
 
-.logo h2 {
-  margin: 0;
-  font-size: 1.3rem;
+/* Make a white block behind the logo aligned with the sidebar width */
+.logo {
+  background-color: #ffffff;
+  width: 250px; /* match sidebar width */
+  padding: 0 1rem; /* horizontal padding only, vertical will fill header */
+  color: #013262; /* dark text on white */
+  border-right: 1px solid rgba(0,0,0,0.06);
+  height: 100%;
+  display: flex;
+  align-items: center; /* center logo vertically inside white block */
+  justify-content: center;
+}
+
+.header-title {
+  flex: 1;
   text-align: center;
+  color: #ffffff;
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding-left: 1.5rem; /* restore padding on small screens */
+  }
+
+  .logo {
+    width: auto;
+    background: transparent;
+    padding: 0;
+  }
+  .header-title {
+    font-size: 1rem;
+  }
 }
 
 .logout-button {
