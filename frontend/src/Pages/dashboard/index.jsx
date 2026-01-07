@@ -140,8 +140,13 @@ function Dashboard() {
     <div className="dashboard-container">
       <div className="dashboard-card">
         <div className="dashboard-header">
-          <h1>📊 Dashboard</h1>
-          <p>Analisis dan monitoring data pengiriman batubara</p>
+          <div className="dashboard-header-content">
+            <img src="/logo/Logo Dashboard.png" alt="Dashboard Logo" className="dashboard-logo" />
+            <div className="dashboard-header-text">
+              <h1>Dashboard</h1>
+              <p>Analisis dan monitoring data pengiriman batubara</p>
+            </div>
+          </div>
         </div>
 
         {loading && (
@@ -160,10 +165,13 @@ function Dashboard() {
           <div className="dashboard-content">
             {/* Summary Cards */}
             <div className="summary-section">
+              
               <h2>📈 Ringkasan Data</h2>
               <div className="summary-cards">
                 <div className="summary-card">
-                  <div className="card-icon">📦</div>
+                  <div className="card-icon">
+                    <img src="/logo/Logo Total Pengiriman.png" alt="Total Pengiriman Icon" />
+                  </div>
                   <div className="card-content">
                     <p className="card-label">Total Pengiriman</p>
                     <p className="card-value">{stats.totalShipments}</p>
@@ -171,7 +179,9 @@ function Dashboard() {
                 </div>
 
                 <div className="summary-card">
-                  <div className="card-icon">⚖️</div>
+                  <div className="card-icon">
+                    <img src="/logo/Logo Tonnage.png" alt="Total Tonnage Icon" />
+                  </div>
                   <div className="card-content">
                     <p className="card-label">Total Tonnage</p>
                     <p className="card-value">{stats.totalTonnage}</p>
@@ -180,7 +190,9 @@ function Dashboard() {
                 </div>
 
                 <div className="summary-card">
-                  <div className="card-icon">📊</div>
+                  <div className="card-icon">
+                    <img src="/logo/Logo Rata - Rata.png" alt="Rata-rata Tonnage Icon" />
+                  </div>
                   <div className="card-content">
                     <p className="card-label">Rata-rata Tonnage</p>
                     <p className="card-value">{stats.averageTonnage}</p>
