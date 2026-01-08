@@ -26,7 +26,7 @@ function EditDataShipment() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
-  const jettyOptions = ['Enim', 'Ogan']
+  const jettyOptions = ['Kertapati Enim', 'Kertapati Ogan', 'FMS', 'STJ', 'Others']
   const statusOptions = ['Loading', 'At Dolphin', 'ETA Keramasan']
 
   useEffect(() => {
@@ -106,7 +106,38 @@ function EditDataShipment() {
 
   function handleChange(e) {
     const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
+    const updatedFormData = {
+      ...formData,
+      [name]: value
+    }
+    
+    // Special handling for "Others" jetty option
+    if (name === 'jetty') {
+      // If user is typing in the manual jetty input, just update the value
+      // The value will be stored directly in the jetty field
+      setFormData(updatedFormData)
+      return
+    }
+    
+    // Auto-calculate rata_rata_muat if both datetime fields are filled
+    if ((name === 'est_commenced_loading' || name === 'est_completed_loading') && 
+        updatedFormData.est_commenced_loading && 
+        updatedFormData.est_completed_loading) {
+      const commenced = new Date(updatedFormData.est_commenced_loading)
+      const completed = new Date(updatedFormData.est_completed_loading)
+      
+      if (commenced < completed) {
+        const diffMs = completed - commenced
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+        const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))
+        
+        const hours = String(diffHours).padStart(2, '0')
+        const minutes = String(diffMinutes).padStart(2, '0')
+        updatedFormData.rata_rata_muat = `${hours}:${minutes}`
+      }
+    }
+    
+    setFormData(updatedFormData)
   }
 
   async function handleSubmit(e) {
@@ -229,6 +260,22 @@ function EditDataShipment() {
               </select>
             </div>
           </div>
+
+          {formData.jetty === 'Others' && (
+            <div className="form-row full">
+              <div className="form-group">
+                <label htmlFor="jetty_manual">Masukkan Nama Jetty</label>
+                <input
+                  id="jetty_manual"
+                  name="jetty"
+                  type="text"
+                  value={formData.jetty}
+                  onChange={handleChange}
+                  placeholder="Masukkan nama jetty secara manual"
+                />
+              </div>
+            </div>
+          )}
 
           <div className="form-row">
             <div className="form-group">

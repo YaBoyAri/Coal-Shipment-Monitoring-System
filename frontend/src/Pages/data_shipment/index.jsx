@@ -14,6 +14,27 @@ function DataShipment() {
   const [deleting, setDeleting] = useState(false)
 
   const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  
+  // Format datetime function
+  const formatDateTime = (dateString) => {
+    if (!dateString) return ''
+    try {
+      const date = new Date(dateString)
+      if (isNaN(date.getTime())) return dateString
+      
+      const year = date.getUTCFullYear()
+      const month = String(date.getUTCMonth() + 1).padStart(2, '0')
+      const day = String(date.getUTCDate()).padStart(2, '0')
+      const hours = String(date.getUTCHours()).padStart(2, '0')
+      const minutes = String(date.getUTCMinutes()).padStart(2, '0')
+      const seconds = String(date.getUTCSeconds()).padStart(2, '0')
+      
+      return `${year}-${month}-${day}\n${hours}:${minutes}:${seconds}`
+    } catch (e) {
+      return dateString
+    }
+  }
+
   const highlight = (text, term) => {
     const str = String(text ?? '')
     const t = String(term ?? '').trim()
@@ -247,8 +268,8 @@ function DataShipment() {
                               {highlight(row.status, searchTerm)}
                             </span>
                           </td>
-                          <td>{highlight(row.est_commenced_loading, searchTerm)}</td>
-                          <td>{highlight(row.est_completed_loading, searchTerm)}</td>
+                          <td>{highlight(formatDateTime(row.est_commenced_loading), searchTerm)}</td>
+                          <td>{highlight(formatDateTime(row.est_completed_loading), searchTerm)}</td>
                           <td>{highlight(row.rata_rata_muat, searchTerm)}</td>
                           <td>{highlight(row.si_spk, searchTerm)}</td>
                           <td className="action-cell">
