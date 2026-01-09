@@ -35,6 +35,29 @@ function DataShipment() {
     }
   }
 
+  // Calculate rata-rata muat from est_completed and est_commenced
+  const calculateRataRataMuat = (commenced, completed) => {
+    if (!commenced || !completed) return ''
+    try {
+      const startDate = new Date(commenced)
+      const endDate = new Date(completed)
+      
+      if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return ''
+      if (startDate >= endDate) return ''
+      
+      const diffMs = endDate - startDate
+      const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+      const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))
+      
+      const hours = String(diffHours).padStart(2, '0')
+      const minutes = String(diffMinutes).padStart(2, '0')
+      
+      return `${hours}:${minutes}`
+    } catch (e) {
+      return ''
+    }
+  }
+
   const highlight = (text, term) => {
     const str = String(text ?? '')
     const t = String(term ?? '').trim()
@@ -270,7 +293,7 @@ function DataShipment() {
                           </td>
                           <td>{highlight(formatDateTime(row.est_commenced_loading), searchTerm)}</td>
                           <td>{highlight(formatDateTime(row.est_completed_loading), searchTerm)}</td>
-                          <td>{highlight(row.rata_rata_muat, searchTerm)}</td>
+                          <td>{highlight(calculateRataRataMuat(row.est_commenced_loading, row.est_completed_loading), searchTerm)}</td>
                           <td>{highlight(row.si_spk, searchTerm)}</td>
                           <td className="action-cell">
                             <Link to={`/edit-data-shipment/${row.id}`} className="btn-action btn-edit" title="Edit data">✏️</Link>

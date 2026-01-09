@@ -28,7 +28,7 @@ function EditDataShipment() {
   const [success, setSuccess] = useState('')
 
   const jettyOptions = ['Kertapati Enim', 'Kertapati Ogan', 'FMS', 'STJ', 'Others']
-  const statusOptions = ['Loading', 'At Dolphin', 'ETA Keramasan']
+  const statusOptions = ['At Jetty', 'At Dolphin', 'At Keramasan']
 
   useEffect(() => {
     fetchItem()

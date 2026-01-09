@@ -13,7 +13,6 @@ function InputDataShipment() {
     buyer: '',
     pod: '',
     jetty: '',
-    jetty_manual: '',
     status: '',
     est_commenced_loading: '',
     est_completed_loading: '',
@@ -29,7 +28,7 @@ function InputDataShipment() {
   const [confirmAction, setConfirmAction] = useState(null)
 
   const jettyOptions = ['Kertapati Enim', 'Kertapati Ogan', 'FMS', 'STJ', 'Others']
-  const statusOptions = ['Loading', 'At Dolphin', 'ETA Keramasan']
+  const statusOptions = ['At Jetty', 'At Dolphin', 'At Keramasan']
 
   // Load form data dari localStorage saat component mount
   useEffect(() => {
@@ -59,23 +58,10 @@ function InputDataShipment() {
       ...formData,
       [name]: value
     }
-    
+
     // Special handling for "Others" jetty option
     if (name === 'jetty') {
-      // When user selects an option from the select, clear manual input
-      // Selecting an explicit option will set `jetty` to that option
-      // If they select an option other than 'Others', ensure manual is cleared
-      if (value !== 'Others') {
-        updatedFormData.jetty_manual = ''
-      }
       setFormData(updatedFormData)
-      return
-    }
-
-    // Manual jetty input handling
-    if (name === 'jetty_manual') {
-      // update manual field only; keep `jetty` marker as 'Others'
-      setFormData({ ...formData, jetty_manual: value, jetty: 'Others' })
       return
     }
     
@@ -108,14 +94,8 @@ function InputDataShipment() {
 
     try {
       const sid = localStorage.getItem('ptba_sid')
-      // If a manual jetty was provided, prefer that value
-      const jettyValue = formData.jetty === 'Others' && formData.jetty_manual
-        ? formData.jetty_manual
-        : formData.jetty
-
       const payload = {
         ...formData,
-        jetty: jettyValue,
         tonnage: formData.tonnage === '' ? null : Number(formData.tonnage),
         rata_rata_muat: formData.rata_rata_muat === '' ? null : String(formData.rata_rata_muat)
       }
@@ -306,24 +286,6 @@ function InputDataShipment() {
               </select>
             </div>
           </div>
-
-          {/* Row 4b: Manual Jetty Input (if Others selected) */}
-          {formData.jetty === 'Others' && (
-            <div className="form-row full">
-              <div className="form-group">
-                <label htmlFor="jetty_manual">Masukkan Nama Jetty</label>
-                <input
-                  id="jetty_manual"
-                  name="jetty_manual"
-                  type="text"
-                  value={formData.jetty_manual}
-                  onChange={handleChange}
-                  placeholder="Masukkan nama jetty secara manual"
-                  required
-                />
-              </div>
-            </div>
-          )}
 
           {/* Row 5: Est Commenced & Est Completed */}
           <div className="form-row">
