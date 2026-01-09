@@ -13,6 +13,7 @@ function EditDataShipment() {
     buyer: '',
     pod: '',
     jetty: '',
+    jetty_manual: '',
     status: '',
     est_commenced_loading: '',
     est_completed_loading: '',
@@ -83,13 +84,23 @@ function EditDataShipment() {
         return ''
       }
 
+      // If the saved jetty value isn't one of the predefined options,
+      // treat it as a manual value and show it in `jetty_manual`.
+      let jettyVal = json.tjetty ?? json.jetty ?? ''
+      let jettyManualVal = ''
+      if (jettyVal && !jettyOptions.includes(jettyVal)) {
+        jettyManualVal = jettyVal
+        jettyVal = 'Others'
+      }
+
       setFormData({
         tug_barge_name: json.tug_barge_name ?? '',
         brand: json.brand ?? '',
         tonnage: json.tonnage ?? '',
         buyer: json.buyer ?? '',
         pod: json.pod ?? '',
-        jetty: json.jetty ?? '',
+        jetty: jettyVal,
+        jetty_manual: jettyManualVal,
         status: json.status ?? '',
         est_commenced_loading: toLocalDateTime(json.est_commenced_loading),
         est_completed_loading: toLocalDateTime(json.est_completed_loading),
@@ -113,9 +124,17 @@ function EditDataShipment() {
     
     // Special handling for "Others" jetty option
     if (name === 'jetty') {
-      // If user is typing in the manual jetty input, just update the value
-      // The value will be stored directly in the jetty field
+      // When selecting a jetty option, clear manual input unless 'Others'
+      if (value !== 'Others') {
+        updatedFormData.jetty_manual = ''
+      }
       setFormData(updatedFormData)
+      return
+    }
+
+    if (name === 'jetty_manual') {
+      // Editing manual jetty should set jetty marker to 'Others'
+      setFormData({ ...formData, jetty_manual: value, jetty: 'Others' })
       return
     }
     
@@ -148,8 +167,14 @@ function EditDataShipment() {
 
     try {
       const sid = localStorage.getItem('ptba_sid')
+      // Prefer manual jetty value when provided
+      const jettyValue = formData.jetty === 'Others' && formData.jetty_manual
+        ? formData.jetty_manual
+        : formData.jetty
+
       const payload = {
         ...formData,
+        jetty: jettyValue,
         tonnage: formData.tonnage === '' ? null : Number(formData.tonnage),
         rata_rata_muat: formData.rata_rata_muat === '' ? null : String(formData.rata_rata_muat)
       }
@@ -267,9 +292,9 @@ function EditDataShipment() {
                 <label htmlFor="jetty_manual">Masukkan Nama Jetty</label>
                 <input
                   id="jetty_manual"
-                  name="jetty"
+                  name="jetty_manual"
                   type="text"
-                  value={formData.jetty}
+                  value={formData.jetty_manual}
                   onChange={handleChange}
                   placeholder="Masukkan nama jetty secara manual"
                 />
