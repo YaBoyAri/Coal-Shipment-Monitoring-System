@@ -48,6 +48,20 @@
   font-family: 'Lato', sans-serif;
 }
 
+.export-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  vertical-align: -3px;
+  margin-right: 0.5rem;
+}
+
+.export-icon--title {
+  width: 22px;
+  height: 22px;
+  vertical-align: -4px;
+}
+
 .export-header p {
   margin: 0;
   color: #666;
@@ -440,6 +454,9 @@
   color: white;
   box-shadow: 0 4px 15px rgba(1, 50, 98, 0.3);
   min-width: 250px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-export:hover:not(:disabled) {

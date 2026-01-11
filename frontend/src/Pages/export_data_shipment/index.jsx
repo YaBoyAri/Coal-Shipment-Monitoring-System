@@ -5,6 +5,11 @@ import './index.css'
 
 function ExportDataShipment() {
   const navigate = useNavigate()
+
+  const ICON_UPLOAD = '/logo/logo_export_data_shipment/Gambar%20Upload.png'
+  const ICON_COLUMNS = '/logo/logo_export_data_shipment/Logo%20Pilih%20Kolom.png'
+  const ICON_FORMAT = '/logo/logo_export_data_shipment/Logo%20Format%20Data.png'
+  const ICON_PREVIEW = '/logo/logo_export_data_shipment/Logo%20Preview%20Data.png'
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -181,7 +186,10 @@ function ExportDataShipment() {
     <div className="export-container">
       <div className="export-card">
         <div className="export-header">
-          <h1>📥 Export Data Shipment</h1>
+          <h1>
+            <img className="export-icon export-icon--title" src={ICON_UPLOAD} alt="" />
+            Export Data Shipment
+          </h1>
           <p>Export data pengiriman batubara ke format Excel</p>
         </div>
 
@@ -252,7 +260,10 @@ function ExportDataShipment() {
             {/* Column Selection Section */}
             <div className="columns-section">
               <div className="columns-header">
-                <h2>📋 Pilih Kolom Export</h2>
+                <h2>
+                  <img className="export-icon" src={ICON_COLUMNS} alt="" />
+                  Pilih Kolom Export
+                </h2>
                 <div className="columns-actions">
                   <button className="btn-link" onClick={selectAllColumns}>
                     Pilih Semua
@@ -287,7 +298,10 @@ function ExportDataShipment() {
 
             {/* Format Section */}
             <div className="format-section">
-              <h2>📊 Format Export</h2>
+              <h2>
+                <img className="export-icon" src={ICON_FORMAT} alt="" />
+                Format Export
+              </h2>
               <div className="format-options">
                 <div className="format-option">
                   <input
@@ -308,7 +322,10 @@ function ExportDataShipment() {
 
             {/* Preview Section */}
             <div className="preview-section">
-              <h2>👁️ Preview Data</h2>
+              <h2>
+                <img className="export-icon" src={ICON_PREVIEW} alt="" />
+                Preview Data
+              </h2>
               <div className="preview-table">
                 <table>
                   <thead>
@@ -347,7 +364,7 @@ function ExportDataShipment() {
                 onClick={handleExport}
                 disabled={selectedCount === 0 || filteredData.length === 0}
               >
-                📥 Export ke Excel ({filteredData.length} baris)
+                Export ke Excel ({filteredData.length} baris)
               </button>
             </div>
           </div>
@@ -355,7 +372,7 @@ function ExportDataShipment() {
 
         {!loading && data.length === 0 && (
           <div className="empty-state">
-            <p>📭 Belum ada data untuk di-export</p>
+            <p>Belum ada data untuk di-export</p>
             <p>Tambahkan data shipment terlebih dahulu</p>
           </div>
         )}

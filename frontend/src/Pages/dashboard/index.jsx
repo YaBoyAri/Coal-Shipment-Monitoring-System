@@ -141,7 +141,7 @@ function Dashboard() {
       <div className="dashboard-card">
         <div className="dashboard-header">
           <div className="dashboard-header-content">
-            <img src="/logo/Logo Dashboard.png" alt="Dashboard Logo" className="dashboard-logo" />
+            <img src="/logo/logo_dashboard/Logo Dashboard.png" alt="Dashboard Logo" className="dashboard-logo" />
             <div className="dashboard-header-text">
               <h1>Dashboard</h1>
               <p>Analisis dan monitoring data pengiriman batubara</p>
@@ -170,7 +170,7 @@ function Dashboard() {
               <div className="summary-cards">
                 <div className="summary-card">
                   <div className="card-icon">
-                    <img src="/logo/Logo Total Pengiriman.png" alt="Total Pengiriman Icon" />
+                    <img src="/logo/logo_dashboard/Logo Total Pengiriman.png" alt="Total Pengiriman Icon" />
                   </div>
                   <div className="card-content">
                     <p className="card-label">Total Pengiriman</p>
@@ -180,7 +180,7 @@ function Dashboard() {
 
                 <div className="summary-card">
                   <div className="card-icon">
-                    <img src="/logo/Logo Tonnage.png" alt="Total Tonnage Icon" />
+                    <img src="/logo/logo_dashboard/Logo Tonnage.png" alt="Total Tonnage Icon" />
                   </div>
                   <div className="card-content">
                     <p className="card-label">Total Tonnage</p>
@@ -191,7 +191,7 @@ function Dashboard() {
 
                 <div className="summary-card">
                   <div className="card-icon">
-                    <img src="/logo/Logo Rata - Rata.png" alt="Rata-rata Tonnage Icon" />
+                    <img src="/logo/logo_dashboard/Logo Rata - Rata.png" alt="Rata-rata Tonnage Icon" />
                   </div>
                   <div className="card-content">
                     <p className="card-label">Rata-rata Tonnage</p>
