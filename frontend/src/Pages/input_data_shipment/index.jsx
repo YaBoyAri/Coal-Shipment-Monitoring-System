@@ -13,6 +13,7 @@ function InputDataShipment() {
     buyer: '',
     pod: '',
     jetty: '',
+    jetty_manual: '',
     status: '',
     est_commenced_loading: '',
     est_completed_loading: '',
@@ -36,7 +37,9 @@ function InputDataShipment() {
       const saved = localStorage.getItem(STORAGE_KEY)
       if (saved) {
         const parsed = JSON.parse(saved)
-        setFormData(parsed)
+        // Merge with initial state so newly added fields (e.g. jetty_manual)
+        // always exist and UI logic stays predictable.
+        setFormData({ ...initialFormState, ...parsed })
       }
     } catch (err) {
       console.error('Failed to load form data:', err)
@@ -61,7 +64,17 @@ function InputDataShipment() {
 
     // Special handling for "Others" jetty option
     if (name === 'jetty') {
+      // When selecting a jetty option, clear manual input unless 'Others'
+      if (value !== 'Others') {
+        updatedFormData.jetty_manual = ''
+      }
       setFormData(updatedFormData)
+      return
+    }
+
+    if (name === 'jetty_manual') {
+      // Editing manual jetty should set jetty marker to 'Others'
+      setFormData({ ...formData, jetty_manual: value, jetty: 'Others' })
       return
     }
     
@@ -94,8 +107,18 @@ function InputDataShipment() {
 
     try {
       const sid = localStorage.getItem('ptba_sid')
+
+      const jettyValue = formData.jetty === 'Others'
+        ? String(formData.jetty_manual || '').trim()
+        : String(formData.jetty || '').trim()
+
+      if (!jettyValue) {
+        throw new Error('Jetty wajib diisi. Jika memilih Others, masukkan nama jetty secara manual.')
+      }
+
       const payload = {
         ...formData,
+        jetty: jettyValue,
         tonnage: formData.tonnage === '' ? null : Number(formData.tonnage),
         rata_rata_muat: formData.rata_rata_muat === '' ? null : String(formData.rata_rata_muat)
       }
@@ -286,6 +309,23 @@ function InputDataShipment() {
               </select>
             </div>
           </div>
+
+          {formData.jetty === 'Others' && (
+            <div className="form-row full">
+              <div className="form-group">
+                <label htmlFor="jetty_manual">Masukkan Nama Jetty</label>
+                <input
+                  id="jetty_manual"
+                  name="jetty_manual"
+                  type="text"
+                  value={formData.jetty_manual}
+                  onChange={handleChange}
+                  placeholder="Masukkan nama jetty secara manual"
+                  required
+                />
+              </div>
+            </div>
+          )}
 
           {/* Row 5: Est Commenced & Est Completed */}
           <div className="form-row">

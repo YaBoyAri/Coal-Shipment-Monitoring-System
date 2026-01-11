@@ -29,8 +29,8 @@ function DataShipment() {
       const minutes = String(date.getUTCMinutes()).padStart(2, '0')
       const seconds = String(date.getUTCSeconds()).padStart(2, '0')
       
-      return `${year}-${month}-${day}\n${hours}:${minutes}:${seconds}`
-    } catch (e) {
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+    } catch {
       return dateString
     }
   }
@@ -53,7 +53,7 @@ function DataShipment() {
       const minutes = String(diffMinutes).padStart(2, '0')
       
       return `${hours}:${minutes}`
-    } catch (e) {
+    } catch {
       return ''
     }
   }
@@ -74,7 +74,7 @@ function DataShipment() {
           part
         )
       )
-    } catch (e) {
+    } catch {
       return str
     }
   }
@@ -107,10 +107,6 @@ function DataShipment() {
     } finally {
       setLoading(false)
     }
-  }
-
-  function handleEdit(id) {
-    navigate(`/edit-data-shipment/${id}`)
   }
 
   function handleDeleteClick(id) {
@@ -296,14 +292,16 @@ function DataShipment() {
                           <td>{highlight(calculateRataRataMuat(row.est_commenced_loading, row.est_completed_loading), searchTerm)}</td>
                           <td>{highlight(row.si_spk, searchTerm)}</td>
                           <td className="action-cell">
-                            <Link to={`/edit-data-shipment/${row.id}`} className="btn-action btn-edit" title="Edit data">✏️</Link>
-                            <button
-                              className="btn-action btn-delete"
-                              onClick={() => handleDeleteClick(row.id)}
-                              title="Hapus data"
-                            >
-                              🗑️
-                            </button>
+                            <div className="action-buttons">
+                              <Link to={`/edit-data-shipment/${row.id}`} className="btn-action btn-edit" title="Edit data">✏️</Link>
+                              <button
+                                className="btn-action btn-delete"
+                                onClick={() => handleDeleteClick(row.id)}
+                                title="Hapus data"
+                              >
+                                🗑️
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))

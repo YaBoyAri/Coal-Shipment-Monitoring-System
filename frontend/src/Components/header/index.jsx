@@ -18,7 +18,7 @@ function Header() {
     <header className="header">
       <div className="header-content">
         <div className="logo">
-          <img src="/logo/Bukit Asam.svg" alt="Bukit Asam Logo" />
+          <img src="/logo/Logo BA - Login.svg" alt="Bukit Asam Logo" />
         </div>
         <h2 className="header-title">Coal Shipment Monitoring System</h2>
         <button className="logout-button" onClick={handleLogout}>

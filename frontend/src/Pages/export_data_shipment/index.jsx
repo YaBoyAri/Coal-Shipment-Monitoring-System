@@ -155,8 +155,26 @@ function ExportDataShipment() {
   }
 
   const filteredData = getFilteredData()
-  const statusOptions = [...new Set(data.map(d => d.status))]
-  const jettyOptions = [...new Set(data.map(d => d.jetty))]
+
+  const uniq = (arr) => [...new Set(arr.filter(Boolean).map(v => String(v).trim()).filter(v => v !== ''))]
+
+  // Keep filter options consistent with app's commonly used statuses/jettys.
+  // - Status: show in a predictable order
+  // - Jetty: show known jettys first, then any manual/custom jettys from data
+  const preferredStatusOrder = ['Loading', 'At Jetty', 'At Dolphin', 'ETA Keramasan', 'At Keramasan']
+  const statusValues = uniq(data.map(d => d.status))
+  const statusOptions = [
+    ...preferredStatusOrder.filter(s => statusValues.includes(s)),
+    ...statusValues.filter(s => !preferredStatusOrder.includes(s)).sort((a, b) => a.localeCompare(b))
+  ]
+
+  const preferredJettyOrder = ['Kertapati Enim', 'Kertapati Ogan', 'FMS', 'STJ']
+  const jettyValues = uniq(data.map(d => d.jetty))
+  const jettyOptions = [
+    ...preferredJettyOrder.filter(j => jettyValues.includes(j)),
+    ...jettyValues.filter(j => !preferredJettyOrder.includes(j)).sort((a, b) => a.localeCompare(b))
+  ]
+
   const selectedCount = Object.values(selectedColumns).filter(v => v).length
 
   return (
