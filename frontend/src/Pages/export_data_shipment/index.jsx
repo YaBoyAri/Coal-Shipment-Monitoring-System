@@ -132,7 +132,7 @@ function ExportDataShipment() {
         const obj = { No: idx + 1 }
         selectedCols.forEach(col => {
           if (col !== 'no') {
-            obj[columnLabels[col]] = row[col] || '-'
+            obj[columnLabels[col]] = col.includes('est_') ? formatDateTime(row[col]) : (row[col] || '-')
           }
         })
         return obj
@@ -162,6 +162,25 @@ function ExportDataShipment() {
   const filteredData = getFilteredData()
 
   const uniq = (arr) => [...new Set(arr.filter(Boolean).map(v => String(v).trim()).filter(v => v !== ''))]
+
+  const formatDateTime = (dateString) => {
+    if (!dateString) return ''
+    try {
+      const date = new Date(dateString)
+      if (isNaN(date.getTime())) return dateString
+      
+      const year = date.getUTCFullYear()
+      const month = String(date.getUTCMonth() + 1).padStart(2, '0')
+      const day = String(date.getUTCDate()).padStart(2, '0')
+      const hours = String(date.getUTCHours()).padStart(2, '0')
+      const minutes = String(date.getUTCMinutes()).padStart(2, '0')
+      const seconds = String(date.getUTCSeconds()).padStart(2, '0')
+      
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+    } catch {
+      return dateString
+    }
+  }
 
   // Keep filter options consistent with app's commonly used statuses/jettys.
   // - Status: show in a predictable order
@@ -344,7 +363,7 @@ function ExportDataShipment() {
                         <td>{idx + 1}</td>
                         {allColumns.map(col => (
                           selectedColumns[col] && col !== 'no' && (
-                            <td key={col}>{row[col] || '-'}</td>
+                            <td key={col}>{col.includes('est_') ? formatDateTime(row[col]) : (row[col] || '-')}</td>
                           )
                         ))}
                       </tr>
