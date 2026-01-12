@@ -273,9 +273,9 @@ function DataShipment() {
                         )
                       }
 
-                      return filtered.map((row) => (
+                      return filtered.map((row, i) => (
                         <tr key={row.id}>
-                          <td>{highlight(row.no, searchTerm)}</td>
+                          <td>{highlight(String(i + 1), searchTerm)}</td>
                           <td>{highlight(row.tug_barge_name, searchTerm)}</td>
                           <td>{highlight(row.brand, searchTerm)}</td>
                           <td>{highlight(row.tonnage, searchTerm)}</td>
